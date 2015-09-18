@@ -1,31 +1,33 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
+author: "Franklin Siqueira"
+date: "09/2015"
 output: 
   html_document:
     keep_md: true
 ---
 
 
-## Loading and preprocessing the data
+## 1. Loading and preprocessing the data
 
 The file used in this assignment can be found in the address https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip.
 
 It is **important** to set the working directory to the directory were the file will be downloaded as it
 is assumed **no particular directory will be created**.
 
-First, let's download, extract and load its contents to a data.frame named **cpActty**:
+1.1 First, let's download, extract and load its contents to a data.frame named **cpActty**:
 
 **Step 1** - Download the file:
 
-```{r downloadindfile}
+```{r downloadindfile11s1}
 if(!file.exists("activity.csv")) {
-temp<-tempfile()
+temp <- tempfile()
 download.file("https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip", temp, method="curl")}
 ```
 
 **Step 2** - Extract the file:
 
-```{r unzippingfile}
+```{r unzippingfile11s2}
 if(!file.exists("activity.csv")) {
 unzip(temp)
 unlink(temp)}
@@ -33,53 +35,197 @@ unlink(temp)}
 
 **Step 3** - Load its contents to a data.frame named cpActty and overview its contents:
 
-```{r definingdataframe}
-cpActty <- read.csv("activity.csv", colClasses = c("numeric", "character", "numeric"))
+```{r definingdataframe11s3}
+cpActty <- read.csv("activity.csv", colClasses = c("numeric", "character", "numeric"), stringsAsFactors=FALSE)
 head(cpActty)
 ```
 
 **Note:** In **Step 1** and **Step 2**, before downloading and extracting, we check if the **activity.csv** already exists. It's not necessary to download and extract it every time we run the code.
 
-## What is mean total number of steps taken per day?
+## 2. What is mean total number of steps taken per day?
 
-In order to obtain the average steps taken per day, first we will aggregate days and steps in a new
+2.1 In order to obtain the average steps taken per day, first we will aggregate days and steps in a new
 data.frame. In this particular, let's call it **cpTtlstepsday**.
 
-```{r aggregatingdata}
-cpTtlstepsday<-aggregate(steps ~ date, data = cpActty, sum, na.rm = TRUE)
+```{r aggregatingdata21}
+cpTtlstepsday <- aggregate(steps ~ date, data = cpActty, sum, na.rm = FALSE)
 ```
 
-Now, let's see its contents:
+2.1.1 Now, let's see its contents:
 
-```{r seeingdata}
+```{r seeingdata211}
 head(cpTtlstepsday)
 ```
 
-As required, below we plot a **histogram** of the total number of steps taken each day:
+2.2 As required, below we plot a **histogram** of the total number of steps taken each day:
 
-```{r plottinghistogram1}
+```{r plottinghistogram22}
 hist(cpTtlstepsday$steps, main = "Total steps by day\n (with NA's)", xlab = "steps", ylab ="frequency (days)", col = "cyan")
 ```
 
-And, finally, the mean and the median:
+2.3 And, the mean, the median and maximum (per day) and the total:
 
-```{r calculatingmeanmedian1}
-mean(cpTtlstepsday$steps, na.rm=TRUE)
-median(cpTtlstepsday$steps, na.rm=TRUE)
+```{r calculatingmeanmedian23}
+mean(cpTtlstepsday$steps, na.rm=FALSE)
+median(cpTtlstepsday$steps, na.rm=FALSE)
+max(cpTtlstepsday$steps, na.rm=FALSE)
+sum(cpTtlstepsday$steps, na.rm=FALSE)
 ```
 
-```{r calculatingmeanmedian2, echo=FALSE}
-mn<-mean(cpTtlstepsday$steps, na.rm=TRUE)
-md<-median(cpTtlstepsday$steps, na.rm=TRUE)
+As calculations above show, the mean is **`r format(mean(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**, the median is **`r format(median(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`** and the maximum is **`r format(max(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**.
+
+## 3. What is the average daily activity pattern?
+
+3.1 Previously, we aggregated the data in terms of steps/date in order to obtain the total steps taken per day and saved it in data.frame called it **cpTtlstepsday**. Now, we are aggregating the data in terms of steps/intervals and saving it in a data.frame called **cpMeanstepsintervals**, as shown in the piece of code below:
+
+
+```{r aggregatingdata31}
+cpMeanstepsintervals <- aggregate(steps ~ interval, data = cpActty, mean, na.rm = TRUE)
+head(cpMeanstepsintervals)
 ```
-As the functions above show, the mean is **`r format(mn, scientific=FALSE, digits=0)`** and the median is **`r format(md, scientific=FALSE, digits=0)`**.
 
-## What is the average daily activity pattern?
+3.2 And plotted, as we see below:
+
+```{r plotting32}
+plot(cpMeanstepsintervals$interval, cpMeanstepsintervals$steps, 
+     type="l", col="cyan", lwd=2, 
+     xlab="Intervals (five minutes)", ylab="Steps (average)", 
+     main="Average number of steps per intervals Time-Series\n(NA's removed)")
+```
+
+3.3 Regarding to which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps, from the code below:
+
+```{r findingmeanmax33}
+cpMeanSImaxp <- which(cpMeanstepsintervals$steps == max(cpMeanstepsintervals$steps))
+cpMeanSImaxi <- cpMeanstepsintervals[cpMeanSImaxp, 1]
+```
+
+The calculated result shows that this 5-minute interval is the **`r cpMeanSImaxi`**, which is the **`r which.max(cpMeanstepsintervals$steps)`th** register, with an average of **`r format(max(cpMeanstepsintervals$steps), scientific=FALSE, digits=0)`** steps.
+
+## 4. Inputing missing values
+
+4.1 Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NA’s)
+
+```{r calculatingNAs41}
+cpNasum <- sum(is.na(cpActty$steps))
+```
+
+4.2 Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
+
+```{r populatingNAs42}
+cpNapos <- which(is.na(cpActty$steps))
+cpMeans <- rep(mean(cpActty$steps, na.rm=TRUE), times=length(cpNapos))
+```
+
+The strategy employed was the replacement of missing values (NAs) with the mean.
+
+4.3 Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+```{r populatingNAs43}
+cpNActty <- cpActty
+cpNActty[cpNapos, "steps"] <- cpMeans
+sum(is.na(cpNActty$steps))
+head(cpNActty)
+```
+
+4.4 Make a histogram of the total number of steps taken each day. Calculate and report **mean**, **median** and **total** number of steps taken per day. 
+
+4.4.1 In order to plot the histogram, first aggregate the data:
+
+```{r aggregatingdata441}
+cpNTtlstepsday <- aggregate(steps ~ date, data = cpNActty, sum, na.rm = FALSE)
+```
+
+4.4.2 Now, let's see its contents and plot a **histogram**:
+
+```{r seeingdata442}
+head(cpNTtlstepsday)
+```
+
+```{r plottinghistogram442}
+hist(cpNTtlstepsday$steps, main = "Total steps by day\n (with NA's removed)", xlab = "steps", ylab ="frequency (days)", col = "cyan")
+```
+
+4.4.3 Then, comparing both histograms:
+
+```{r plottinghistogram443}
+par(mfcol = c(1,2))
+
+hist(cpTtlstepsday$steps, main = "Total steps by day\n (with NA's)", xlab = "steps", ylab ="frequency (days)", col = "cyan")
+
+hist(cpNTtlstepsday$steps, main = "Total steps by day\n (with NA's replaced)", xlab = "steps", ylab ="frequency (days)", col = "cyan")
+```
 
 
+4.5 Calculating, the mean, the median and the maximum number of steps per day and the total of steps found in data.frame **cpNTtlstepsday**:
 
-## Imputing missing values
+```{r calculatingmeanmedian45}
+mean(cpNTtlstepsday$steps, na.rm=FALSE)
+median(cpNTtlstepsday$steps, na.rm=FALSE)
+sum(cpNTtlstepsday$steps, na.rm=FALSE)
+max(cpNTtlstepsday$steps, na.rm=FALSE)
+```
 
+The calculations above show that, after replacing NAs with the mean, the mean and the median have the same values (mean=**`r format(mean(cpNTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`** and median=**`r format(median(cpNTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**); the maximum number of steps still is **`r format(max(cpNTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**; and the sum to **`r format(sum(cpNTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`** (before, the calculated sum was equal to **`r format(sum(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**).
 
+4.6 Do these values differ from the estimates from the first part of the assignment? 
 
-## Are there differences in activity patterns between weekdays and weekends?
+As explained above, after replacing NAs with the mean:
+
+. The total number of steps raised from **`r format(sum(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`** to **`r format(sum(cpNTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**;
+
+. The maximum number of steps per day is still the same (**`r format(max(cpNTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**);
+
+. The mean number of steps per day remains the same (**`r format(mean(cpNTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**);
+
+. The median has been altered with the addiction of **`r format(median(cpNTtlstepsday$steps, na.rm=FALSE)-median(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`** more step and has the same value of the mean (above).
+
+4.7 What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+The impact observed refers to a slight raise in median's value. 
+
+## 5. Are there differences in activity patterns between weekdays and weekends?
+
+5.1 Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
+
+5.1.1
+```{r applyingweekdays511}
+cpNTtlstepsWday      <- cpActty
+cpNTtlstepsWday$date <- as.POSIXct(cpNTtlstepsWday$date, format="%Y-%m-%d")
+```
+
+5.1.2
+
+```{r applyingweekdays512}
+cpNTtlstepsWday <- data.frame(date=cpNTtlstepsWday$date, weekday=tolower(weekdays(cpNTtlstepsWday$date)), 
+                           steps=cpNTtlstepsWday$steps, interval=cpNTtlstepsWday$interval)
+
+cpNTtlstepsWday <- cbind(cpNTtlstepsWday, daycat=ifelse(cpNTtlstepsWday$weekday == "sabado" | 
+                                     cpNTtlstepsWday$weekday == "domingo", "weekend", "weekday"))
+```
+
+5.2 Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
+
+5.2.1 Aggregating:
+
+```{r aggregating521}
+cpMsteps <- aggregate(cpNTtlstepsWday$steps, by=list(cpNTtlstepsWday$daycat, cpNTtlstepsWday$weekday, cpNTtlstepsWday$interval), mean, na.rm=TRUE)
+names(cpMsteps) <- c("Category", "DayofWeek", "Interval", "Mean")
+head(cpMsteps)
+```
+
+5.2.2 Plotting:
+
+```{r plotting522}
+library(lattice)
+xyplot(Mean ~ Interval | Category, cpMsteps, type="l", lwd=1, xlab="Interval", ylab="Number of steps", 
+       layout=c(1,2))
+```
+
+## Acknowledgements
+
+This work wouldn't be possible without the help found in the following sources, among others:
+
+. https://class.coursera.org/repdata-032/forum/thread?thread_id=20  
+. http://rstudio-pubs-static.s3.amazonaws.com/17469_4fbb71c305ba4a25a40eba1f8cdbb3e9.html  
+. https://rpubs.com/bignumericx/pa1
