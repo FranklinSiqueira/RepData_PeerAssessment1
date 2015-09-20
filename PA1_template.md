@@ -2,6 +2,21 @@
 Franklin Siqueira  
 09/2015  
 
+```r
+## Contents
+
+### 1. Loading and preprocessing the data
+
+### 2. What is mean total number of steps taken per day?
+
+### 3. What is the average daily activity pattern?
+
+### 4. Inputing missing values
+
+### 5. Are there differences in activity patterns between weekdays and weekends?
+
+### Acknowledgements
+```
 
 ## 1. Loading and preprocessing the data
 
