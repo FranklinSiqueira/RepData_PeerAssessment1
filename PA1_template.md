@@ -1,8 +1,7 @@
 # Reproducible Research: Peer Assessment 1
 Franklin Siqueira  
 09/2015  
-
-```r
+***
 ## Contents
 
 ### 1. Loading and preprocessing the data
@@ -16,7 +15,7 @@ Franklin Siqueira
 ### 5. Are there differences in activity patterns between weekdays and weekends?
 
 ### Acknowledgements
-```
+***
 
 ## 1. Loading and preprocessing the data
 
@@ -64,6 +63,8 @@ head(cpActty)
 ```
 
 **Note:** In **Step 1** and **Step 2**, before downloading and extracting, we check if the **activity.csv** already exists. It's not necessary to download and extract it every time we run the code.
+
+***
 
 ## 2. What is mean total number of steps taken per day?
 
@@ -138,6 +139,8 @@ sum(cpTtlstepsday$steps, na.rm=FALSE)
 
 As calculations above show, the mean is **10766**, the median is **10765** and the maximum is **21194**.
 
+***
+
 ## 3. What is the average daily activity pattern?
 
 3.1 Previously, we aggregated the data in terms of steps/date in order to obtain the total steps taken per day and saved it in data.frame called it **cpTtlstepsday**. Now, we are aggregating the data in terms of steps/intervals and saving it in a data.frame called **cpMeanstepsintervals**, as shown in the piece of code below:
@@ -180,6 +183,8 @@ cpMeanSImaxi <- cpMeanstepsintervals[cpMeanSImaxp, 1]
 ```
 
 The calculated result shows that this 5-minute interval is the **835**, which is the **104th** register, with an average of **206** steps.
+
+***
 
 ## 4. Inputing missing values
 
@@ -327,6 +332,8 @@ As explained above, after replacing NAs with the mean:
 
 The impact observed refers to a slight raise in median's value. 
 
+***
+
 ## 5. Are there differences in activity patterns between weekdays and weekends?
 
 5.1 Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
@@ -387,6 +394,8 @@ xyplot(Mean ~ Interval | Category, cpMsteps, type="l", lwd=1, xlab="Interval", y
 ```
 
 ![](PA1_template_files/figure-html/plotting522-1.png) 
+
+***
 
 ## Acknowledgements
 

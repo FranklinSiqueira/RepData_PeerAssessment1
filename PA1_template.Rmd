@@ -6,7 +6,7 @@ output:
   html_document:
     keep_md: true
 ---
-
+***
 ## Contents
 
 ### 1. Loading and preprocessing the data
@@ -20,7 +20,7 @@ output:
 ### 5. Are there differences in activity patterns between weekdays and weekends?
 
 ### Acknowledgements
-
+***
 
 ## 1. Loading and preprocessing the data
 
@@ -56,6 +56,8 @@ head(cpActty)
 
 **Note:** In **Step 1** and **Step 2**, before downloading and extracting, we check if the **activity.csv** already exists. It's not necessary to download and extract it every time we run the code.
 
+***
+
 ## 2. What is mean total number of steps taken per day?
 
 2.1 In order to obtain the average steps taken per day, first we will aggregate days and steps in a new
@@ -88,6 +90,8 @@ sum(cpTtlstepsday$steps, na.rm=FALSE)
 
 As calculations above show, the mean is **`r format(mean(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**, the median is **`r format(median(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`** and the maximum is **`r format(max(cpTtlstepsday$steps, na.rm=FALSE), scientific=FALSE, digits=0)`**.
 
+***
+
 ## 3. What is the average daily activity pattern?
 
 3.1 Previously, we aggregated the data in terms of steps/date in order to obtain the total steps taken per day and saved it in data.frame called it **cpTtlstepsday**. Now, we are aggregating the data in terms of steps/intervals and saving it in a data.frame called **cpMeanstepsintervals**, as shown in the piece of code below:
@@ -115,6 +119,8 @@ cpMeanSImaxi <- cpMeanstepsintervals[cpMeanSImaxp, 1]
 ```
 
 The calculated result shows that this 5-minute interval is the **`r cpMeanSImaxi`**, which is the **`r which.max(cpMeanstepsintervals$steps)`th** register, with an average of **`r format(max(cpMeanstepsintervals$steps), scientific=FALSE, digits=0)`** steps.
+
+***
 
 ## 4. Inputing missing values
 
@@ -198,6 +204,8 @@ As explained above, after replacing NAs with the mean:
 
 The impact observed refers to a slight raise in median's value. 
 
+***
+
 ## 5. Are there differences in activity patterns between weekdays and weekends?
 
 5.1 Create a new factor variable in the dataset with two levels – “weekday” and “weekend” indicating whether a given date is a weekday or weekend day.
@@ -235,6 +243,8 @@ library(lattice)
 xyplot(Mean ~ Interval | Category, cpMsteps, type="l", lwd=1, xlab="Interval", ylab="Number of steps", 
        layout=c(1,2))
 ```
+
+***
 
 ## Acknowledgements
 
