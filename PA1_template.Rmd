@@ -1,28 +1,32 @@
 ---
 title: "Reproducible Research: Peer Assessment 1"
 author: "Franklin Siqueira"
-date: "09/2015"
+date: "10/2015"
 output: 
   html_document:
     keep_md: true
 ---
 ***
-## Contents
-
-### 1. Loading and preprocessing the data
-
-### 2. What is mean total number of steps taken per day?
-
-### 3. What is the average daily activity pattern?
-
-### 4. Inputing missing values
-
-### 5. Are there differences in activity patterns between weekdays and weekends?
-
-### Acknowledgements
+### Contents
 ***
 
-## 1. Loading and preprocessing the data
+**1. Loading and preprocessing the data** 
+
+**2. What is mean total number of steps taken per day?** 
+
+**3. What is the average daily activity pattern?** 
+
+**4. Inputing missing values** 
+
+**5. Are there differences in activity patterns between weekdays and weekends?** 
+
+**Acknowledgements** 
+
+**Environment Information** 
+
+***
+
+###1. Loading and preprocessing the data
 
 The file used in this assignment can be found in the address https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip.
 
@@ -49,7 +53,7 @@ unlink(temp)}
 
 **Step 3** - Load its contents to a data.frame named cpActty and overview its contents:
 
-```{r definingdataframe11s3}
+```{r definingdataframe11s3, cache=TRUE}
 cpActty <- read.csv("activity.csv", colClasses = c("numeric", "character", "numeric"), stringsAsFactors=FALSE)
 head(cpActty)
 ```
@@ -63,7 +67,7 @@ head(cpActty)
 2.1 In order to obtain the average steps taken per day, first we will aggregate days and steps in a new
 data.frame. In this particular, let's call it **cpTtlstepsday**.
 
-```{r aggregatingdata21}
+```{r aggregatingdata21, cache=TRUE}
 cpTtlstepsday <- aggregate(steps ~ date, data = cpActty, sum, na.rm = FALSE)
 ```
 
@@ -75,7 +79,7 @@ head(cpTtlstepsday)
 
 2.2 As required, below we plot a **histogram** of the total number of steps taken each day:
 
-```{r plottinghistogram22}
+```{r plottinghistogram22, cache=TRUE}
 hist(cpTtlstepsday$steps, main = "Total steps by day\n (with NA's)", xlab = "steps", ylab ="frequency (days)", col = "cyan")
 ```
 
@@ -97,7 +101,7 @@ As calculations above show, the mean is **`r format(mean(cpTtlstepsday$steps, na
 3.1 Previously, we aggregated the data in terms of steps/date in order to obtain the total steps taken per day and saved it in data.frame called it **cpTtlstepsday**. Now, we are aggregating the data in terms of steps/intervals and saving it in a data.frame called **cpMeanstepsintervals**, as shown in the piece of code below:
 
 
-```{r aggregatingdata31}
+```{r aggregatingdata31, cache=TRUE}
 cpMeanstepsintervals <- aggregate(steps ~ interval, data = cpActty, mean, na.rm = TRUE)
 head(cpMeanstepsintervals)
 ```
@@ -253,3 +257,11 @@ This work wouldn't be possible without the help found in the following sources, 
 . https://class.coursera.org/repdata-032/forum/thread?thread_id=20  
 . http://rstudio-pubs-static.s3.amazonaws.com/17469_4fbb71c305ba4a25a40eba1f8cdbb3e9.html  
 . https://rpubs.com/bignumericx/pa1
+
+***
+
+## Environment Information
+
+```{r Environment}
+sessionInfo()
+```

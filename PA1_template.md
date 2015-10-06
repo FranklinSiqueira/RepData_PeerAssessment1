@@ -1,23 +1,27 @@
 # Reproducible Research: Peer Assessment 1
 Franklin Siqueira  
-09/2015  
+10/2015  
 ***
-## Contents
-
-### 1. Loading and preprocessing the data
-
-### 2. What is mean total number of steps taken per day?
-
-### 3. What is the average daily activity pattern?
-
-### 4. Inputing missing values
-
-### 5. Are there differences in activity patterns between weekdays and weekends?
-
-### Acknowledgements
+### Contents
 ***
 
-## 1. Loading and preprocessing the data
+**1. Loading and preprocessing the data** 
+
+**2. What is mean total number of steps taken per day?** 
+
+**3. What is the average daily activity pattern?** 
+
+**4. Inputing missing values** 
+
+**5. Are there differences in activity patterns between weekdays and weekends?** 
+
+**Acknowledgements** 
+
+**Environment Information** 
+
+***
+
+###1. Loading and preprocessing the data
 
 The file used in this assignment can be found in the address https://d396qusza40orc.cloudfront.net/repdata/data/activity.zip.
 
@@ -404,3 +408,31 @@ This work wouldn't be possible without the help found in the following sources, 
 . https://class.coursera.org/repdata-032/forum/thread?thread_id=20  
 . http://rstudio-pubs-static.s3.amazonaws.com/17469_4fbb71c305ba4a25a40eba1f8cdbb3e9.html  
 . https://rpubs.com/bignumericx/pa1
+
+***
+
+## Environment Information
+
+
+```r
+sessionInfo()
+```
+
+```
+## R version 3.1.2 (2014-10-31)
+## Platform: x86_64-apple-darwin10.8.0 (64-bit)
+## 
+## locale:
+## [1] pt_BR.UTF-8/pt_BR.UTF-8/pt_BR.UTF-8/C/pt_BR.UTF-8/pt_BR.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] lattice_0.20-31
+## 
+## loaded via a namespace (and not attached):
+##  [1] digest_0.6.8    evaluate_0.8    formatR_1.2     grid_3.1.2     
+##  [5] htmltools_0.2.6 knitr_1.11      magrittr_1.5    rmarkdown_0.8  
+##  [9] stringi_0.4-1   stringr_1.0.0   tools_3.1.2     yaml_2.1.13
+```
